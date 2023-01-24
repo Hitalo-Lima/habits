@@ -8,13 +8,22 @@ form.addEventListener("change", save);
 function add() {
   const today = new Date().toLocaleDateString("pt-br").slice(0, -5);
   const dayExists = controller.dayExists(today);
-  dayExists
-    ? alert(
-        `Dia ${today} já registrado, volte amanhã para poder registrar mais um dia`
-      )
-    : controller.addDay(today);
+  if (dayExists) {
+    Swal.fire({
+      icon: "error",
+      title: `Dia ${today} já adicionado!`,
+      text: 'Volte amanha para registrar mais um dia',
+    });
+  } else {
+    controller.addDay(today);
+    Swal.fire({
+      icon: "success",
+      title: "Dia adicionado com sucesso!",
+      showConfirmButton: false,
+      timer: 1500,
+    });
+  }
 }
-
 function save() {
   localStorage.setItem("NLWSetup@habits", JSON.stringify(controller.data));
 }
